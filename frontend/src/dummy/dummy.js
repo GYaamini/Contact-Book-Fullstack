@@ -1,0 +1,111 @@
+export const CONTACTS = [{
+  "id": 1,
+  "fname": "Candie",
+  "lname": "Kalkofen",
+  "source": "Sales",
+  "notes": "Reduced",
+  "phone_number_1": "779-945-0981",
+  "phone_number_2": "473-194-1409",
+  "email": "ckalkofen0@arstechnica.com",
+  "gender": "Female",
+  "birthday": "18-12-1964"
+}, {
+  "id": 2,
+  "fname": "Pauly",
+  "lname": "Broomhall",
+  "source": "Sales",
+  "notes": "transitional",
+  "phone_number_1": "946-803-3566",
+  "phone_number_2": "204-495-2969",
+  "email": "pbroomhall1@acquirethisname.com",
+  "gender": "Female",
+  "birthday": "03-03-1958"
+}, {
+  "id": 3,
+  "fname": "Corabel",
+  "lname": "Grimme",
+  "source": "Research and Development",
+  "notes": "orchestration",
+  "phone_number_1": "883-283-2864",
+  "phone_number_2": "389-240-3654",
+  "email": "cgrimme2@angelfire.com",
+  "gender": "Female",
+  "birthday": "14-07-1950"
+}, {
+  "id": 4,
+  "fname": "Josey",
+  "lname": "Cartin",
+  "source": "Product Management",
+  "notes": "Function-based",
+  "phone_number_1": "123-350-3661",
+  "phone_number_2": "908-867-6839",
+  "email": "jcartin3@admin.ch",
+  "gender": "Female",
+  "birthday": "01-12-2006"
+}, {
+  "id": 5,
+  "fname": "Reggie",
+  "lname": "Pleming",
+  "source": "Support",
+  "notes": "Self-enabling",
+  "phone_number_1": "212-719-0515",
+  "phone_number_2": "548-351-0576",
+  "email": "rpleming4@webmd.com",
+  "gender": "Male",
+  "birthday": "29-04-1969"
+}, {
+  "id": 6,
+  "fname": "Elias",
+  "lname": "Coule",
+  "source": "Services",
+  "notes": "throughput",
+  "phone_number_1": "128-616-6930",
+  "phone_number_2": "206-920-6581",
+  "email": "ecoule5@wordpress.com",
+  "gender": "Male",
+  "birthday": "04-07-2006"
+}, {
+  "id": 7,
+  "fname": "Boniface",
+  "lname": "Drei",
+  "source": "Engineering",
+  "notes": "access",
+  "phone_number_1": "481-222-0662",
+  "phone_number_2": "418-374-7163",
+  "email": "bdrei6@youtube.com",
+  "gender": "Male",
+  "birthday": "04-11-1988"
+}, {
+  "id": 8,
+  "fname": "Celka",
+  "lname": "Willmer",
+  "source": "Legal",
+  "notes": "leverage",
+  "phone_number_1": "202-985-2846",
+  "phone_number_2": "264-925-8522",
+  "email": "cwillmer7@blogtalkradio.com",
+  "gender": "Female",
+  "birthday": "30-11-2023"
+}, {
+  "id": 9,
+  "fname": "Gray",
+  "lname": "McBratney",
+  "source": "Engineering",
+  "notes": "Integrated",
+  "phone_number_1": "137-176-3215",
+  "phone_number_2": "911-121-0764",
+  "email": "gmcbratney8@360.cn",
+  "gender": "Male",
+  "birthday": "10-07-2006"
+}, {
+  "id": 10,
+  "fname": "Norbert",
+  "lname": "Gedney",
+  "source": "Training",
+  "notes": "demand-driven",
+  "phone_number_1": "886-935-5466",
+  "phone_number_2": "188-313-7583",
+  "email": "ngedney9@netvibes.com",
+  "gender": "Male",
+  "birthday": "23-12-1981"
+}];

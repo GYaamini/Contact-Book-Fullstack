@@ -36,8 +36,8 @@ class Contact(db.Model, Persistence):
     lname = db.Column(db.String(30), nullable=True)
     source = db.Column(db.String(100), nullable=False)
     notes = db.Column(db.Text, nullable=True)
-    phone_number_1 = db.Column(db.Integer, nullable=False)
-    phone_number_2 = db.Column(db.Integer, nullable=True)
+    phone_number_1 = db.Column(db.String(15), nullable=False)
+    phone_number_2 = db.Column(db.String(15), nullable=True)
     email = db.Column(db.String(100), nullable=True)
     gender = db.Column(db.String(10), nullable=True)
     birthday = db.Column(db.String(15), nullable=True)
@@ -67,14 +67,14 @@ class Contact(db.Model, Persistence):
                     return jsonify({"msg": f"Missing {col}", "error": status.HTTP_204_NO_CONTENT})
             
             self.fname = data.get("firstName")
-            self.lname = data.get("lastName") if "lastName" in cols else None
+            self.lname = data.get("lastName") if "lastName" in cols else ""
             self.source = data.get("source")
-            self.notes = data.get("notes") if "notes" in cols else None
+            self.notes = data.get("notes") if "notes" in cols else "..."
             self.phone_number_1 = data.get("phoneNumber1")
-            self.phone_number_2 = data.get("phoneNumber2") if "phoneNumber2" in cols else None
-            self.email = data.get("email") if "email" in cols else None
-            self.gender = data.get("gender") if "gender" in cols else None
-            self.birthday = data.get("birthday") if "birthday" in cols else None
+            self.phone_number_2 = data.get("phoneNumber2") if "phoneNumber2" in cols else ""
+            self.email = data.get("email") if "email" in cols else "@?"
+            self.gender = data.get("gender") if "gender" in cols else ""
+            self.birthday = data.get("birthday") if "birthday" in cols else ""
             
             ln = self.lname if self.lname!=None else ""
             if self.gender!=None:

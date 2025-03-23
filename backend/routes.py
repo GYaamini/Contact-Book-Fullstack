@@ -1,5 +1,5 @@
 from app import app, db
-from flask import request, jsonify, abort
+from flask import request, jsonify
 from models import Contact
 from handlers import status
 
