@@ -3,28 +3,59 @@ import React from 'react'
 import { BiTrash } from 'react-icons/bi'
 import { useColorModeValue } from './color-mode'
 import EditContact from './EditContact'
+import { BASE_URL } from '@/App'
+import { toaster } from './toaster'
 
-const ContactCard = ({contact}) => {
-  return <>
+const ContactCard = ({contact,setContacts}) => {
+    const handleChange = async() => {
+        const name = contact.firstName+ " "+contact.lastName
+        const confirmDelete = window.confirm("Are you sure you want to delete "+name+"?")
+        if(confirmDelete){
+            try{
+                const res = await fetch(BASE_URL+"/contacts/"+contact.id,{
+                    method: "DELETE",
+                })
+
+                const data = res.json()
+                if(!res.ok){
+                    throw new Error(data.error)
+                }
+
+                setContacts((prevContacts) => prevContacts.filter((con) => con.id !== contact.id))
+                toaster.success({
+                    title: "Contact Deleted 😤",
+                    description: `${name} contact is deleted successfully`,
+                })
+            }catch (error){
+                toaster.error({
+                    title: "Something Went Wrong 😕",
+                    description: error.message,
+                })
+            }
+        }
+        
+    }
+    return <>
     <Card.Root width="400px">
         <Card.Body gap="2">
             <Flex gap="5" justifyContent={"space-between"}>
                 <HStack>
-                <Avatar.Root size="lg" shape="rounded">
-                    <Avatar.Image src="https://avatar.iran.liara.run/public" />
-                    <Avatar.Fallback name="Nue Camp" />
+                <Avatar.Root size="lg" shape="full">
+                    <Avatar.Image src={contact.imgURL}/>
+                    <Avatar.Fallback name={contact.firstName + " " + contact.lastName} />
                 </Avatar.Root>
                 <Stack>
-                    <Card.Title mt="2">{contact.fname + " " + contact.lname}</Card.Title>
+                    <Card.Title mt="2">{contact.firstName + " " + contact.lastName}</Card.Title>
                     <Text fontWeight="semibold" textStyle="sm">{contact.source}</Text>
                 </Stack>                
             </HStack>
             <HStack gap="1">
-                <EditContact/>
+                <EditContact contact={contact} setContacts={setContacts}/>
                 <IconButton
                     variant="ghost"
                     size={"sm"}
                     aria-label="See menu"
+                    onClick={handleChange}
                 >
                     <BiTrash size={40}/>
                 </IconButton>
@@ -39,8 +70,8 @@ const ContactCard = ({contact}) => {
                 <Text>{contact.birthday}</Text>
             </Flex>
             <Box borderRadius="md" paddingTop="3" paddingBottom="3" bg={useColorModeValue("gray.200","gray.900")}>                    
-                <Text fontWeight="bold" textStyle="sm">{"Mobile : " + contact.phone_number_1}</Text>
-                <Text>{"Work : " + contact.phone_number_2}</Text>
+                <Text fontWeight="bold" textStyle="sm">{"Mobile : " + contact.phoneNumber1}</Text>
+                <Text>{"Work : " + contact.phoneNumber2}</Text>
                 <Text>{"Email : " + contact.email}</Text>
             </Box>
             
@@ -50,7 +81,7 @@ const ContactCard = ({contact}) => {
 
         </Card.Footer>
     </Card.Root>
-  </>
+    </>
 }
 
 export default ContactCard

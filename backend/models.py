@@ -58,30 +58,26 @@ class Contact(db.Model, Persistence):
             "imgURL": self.image_url,
         }
 
-    def deserialize(self, data):
+    def deserialize(self, data, purpose="normal"):
         try:
-            required = ["firstName", "source", "phoneNumber1"]
-            cols =  data.keys()
-            for col in required:
-                if col not in cols:
-                    return jsonify({"msg": f"Missing {col}", "error": status.HTTP_204_NO_CONTENT})
-            
+                            
             self.fname = data.get("firstName")
-            self.lname = data.get("lastName") if "lastName" in cols else ""
-            self.source = data.get("source")
-            self.notes = data.get("notes") if "notes" in cols else "..."
+            self.lname = data.get("lastName")
+            self.notes = data.get("notes")
             self.phone_number_1 = data.get("phoneNumber1")
-            self.phone_number_2 = data.get("phoneNumber2") if "phoneNumber2" in cols else ""
-            self.email = data.get("email") if "email" in cols else "@?"
-            self.gender = data.get("gender") if "gender" in cols else ""
-            self.birthday = data.get("birthday") if "birthday" in cols else ""
+            self.phone_number_2 = data.get("phoneNumber2")
+            self.email = data.get("email")
+            self.birthday = data.get("birthday")
             
-            ln = self.lname if self.lname!=None else ""
-            if self.gender!=None:
-                gen = "boy" if self.gender=="male" else "girl"
-                self.image_url = f"https://avatar.iran.liara.run/public/{gen}?username={self.fname+" "+ln}"
-            else:
-                self.image_url = f"https://avatar.iran.liara.run/username?username={self.fname+" "+ln}"
+            if purpose is "normal":
+                self.source = data.get("source")
+                self.gender = data.get("gender")
+                
+                if self.gender!="":
+                    gen = "boy" if self.gender=="Male" else "girl"
+                    self.image_url = f"https://avatar.iran.liara.run/public/{gen}?username={self.fname+" "+self.lname}"
+                else:
+                    self.image_url = f"https://avatar.iran.liara.run/username?username={self.fname+" "+self.lname}"
         except AttributeError as error:
             raise DataValidationError("Invalid attribute: " + error.args[0])
         except TypeError as error:

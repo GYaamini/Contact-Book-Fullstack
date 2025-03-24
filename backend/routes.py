@@ -2,6 +2,8 @@ from app import app, db
 from flask import request, jsonify
 from models import Contact
 from handlers import status
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import or_
 
 @app.route("/")
 def index():
@@ -34,8 +36,7 @@ def create_contacts():
     except Exception as error:
         return jsonify({"message": "Invalid or No Acceptable Content","error": status.HTTP_204_NO_CONTENT})
         
-    message = new_contact.serialize()
-    return jsonify(message), status.HTTP_201_CREATED  
+    return jsonify(new_contact.serialize()), status.HTTP_201_CREATED  
 
 
 #########################################################
@@ -50,10 +51,22 @@ def read_contact_by_id(contact_id):
     
     return jsonify(contact.serialize()), status.HTTP_200_OK
             
-@app.route("/contacts/<string:contact_name>", methods=["GET"])
-def read_contact_by_name(contact_name):
+@app.route("/contacts/<string:input>", methods=["GET"])
+def read_contact_by_name(input):
     """ Reads all contacts with the provided first name """
-    contacts = db.session.query(Contact).filter_by(fname=contact_name)
+    contacts = Contact.query.filter(
+                or_(
+                    Contact.fname.ilike(f"%{input}%"),
+                    Contact.lname.ilike(f"%{input}%"),
+                    Contact.source.ilike(f"%{input}%"),
+                    Contact.notes.ilike(f"%{input}%"),
+                    Contact.phone_number_1.ilike(f"%{input}%"),
+                    Contact.phone_number_2.ilike(f"%{input}%"),
+                    Contact.email.ilike(f"%{input}%"),
+                    Contact.gender.ilike(f"%{input}%"),
+                    Contact.birthday.ilike(f"%{input}%")
+                )
+            ).all()
     if not contacts:
         return jsonify({"error": status.HTTP_404_NOT_FOUND, "message": f"No contacts found with name: {contact_name} :("})
         
@@ -84,6 +97,6 @@ def update_contact(contact_id):
     if not contact:
         return jsonify({"error":status.HTTP_404_NOT_FOUND, "message": f"No contacts found with ID: {contact_id} :("})
     
-    contact.deserialize(request.json)
+    contact.deserialize(request.json,"update")
     contact.update()
     return jsonify(contact.serialize()), status.HTTP_200_OK

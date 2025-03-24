@@ -1,14 +1,17 @@
-import React from 'react'
-import { 
-  Container, Stack, Text
-} from '@chakra-ui/react'
+import React, { useState } from 'react'
+import { Container, Stack, Text } from '@chakra-ui/react'
 import Navbar from './components/ui/Navbar'
 import ContactGrid from './components/ui/ContactGrid'
+import { Toaster, toaster } from './components/ui/toaster'
+
+export const BASE_URL = "http://127.0.0.1:5000"
 
 function App() {
-  return (
+  const [contacts, setContacts] = useState([])
+  return <>
+    <Toaster/>
     <Stack minH={"100vh"}>
-      <Navbar/>
+      <Navbar setContacts={setContacts}/>
       <Container maxW={"1350px"} my={4}>
         <Text fontSize={{base: "4xl", md:"50"}}
               fontWeight={"800"}
@@ -25,10 +28,10 @@ function App() {
           </Text>
           ✌️
         </Text>
-        <ContactGrid/>
+        <ContactGrid contacts={contacts} setContacts={setContacts}/>
       </Container>
     </Stack>
-  )
+  </>
 }
 
 export default App
