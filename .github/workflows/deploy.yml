@@ -5,6 +5,9 @@ on:
     branches:
       - main  # or 'master' based on your default branch
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -33,5 +36,3 @@ jobs:
         with:
           branch: gh-pages  # The branch to deploy to
           folder: frontend/dist  # The folder containing the production build
-        env:
-          TOKEN: ${{ secrets.TOKEN }}
