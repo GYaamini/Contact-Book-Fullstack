@@ -7,7 +7,9 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+
+# Comment this out for production
+# CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///contacts.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
