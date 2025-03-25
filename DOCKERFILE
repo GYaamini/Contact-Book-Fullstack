@@ -1,5 +1,5 @@
 # Step 1: Build the Frontend (Vite)
-FROM node:16 AS frontend
+FROM node:latest AS frontend
 
 # Set working directory for frontend
 WORKDIR /frontend
