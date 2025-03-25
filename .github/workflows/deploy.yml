@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 'latest'  # or your desired Node.js version
+          node-version: 'LTS'  # or your desired Node.js version
 
       # Install dependencies and build the Vite app
       - name: Install dependencies
