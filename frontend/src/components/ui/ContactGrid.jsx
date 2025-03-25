@@ -2,6 +2,7 @@ import { Flex, Grid, Spinner, Text, VStack} from '@chakra-ui/react'
 import { React, useEffect, useState } from 'react'
 import ContactCard from './ContactCard'
 import { BASE_URL } from '@/App'
+import { toaster } from './toaster'
 
 const ContactGrid = ({contacts,setContacts}) => {
   const [isLoading, setIsLoading] = useState(true)
@@ -17,7 +18,10 @@ const ContactGrid = ({contacts,setContacts}) => {
 
         setContacts(data)
       }catch(error){
-        console.error(error)
+        toaster.error({
+          title: "Something Went Wrong 😕",
+          description: error.message,
+      })
       }finally{
         setIsLoading(false)
       }
@@ -26,6 +30,24 @@ const ContactGrid = ({contacts,setContacts}) => {
   },[setContacts])
   return (
     <>
+      {isLoading && (
+        <VStack colorPalette="teal" justifyContent={"center"}>
+          <Spinner color="colorPalette.600" />
+          <Text>Loading...</Text>
+        </VStack>
+      )}
+      
+      {!isLoading && contacts.length === 0 && (
+        <Flex justifyContent={"center"}>
+          <VStack fontSize={"xl"}>
+            <Text as={"span"} fontSize={"2xl"} fontWeight={"bold"} mr={2}>
+              OOOPS 🙀
+            </Text>
+            No Contact to Comb
+          </VStack>
+        </Flex>
+      )}
+
       <Grid
         templateColumns={{
             base: "1fr",
@@ -38,23 +60,6 @@ const ContactGrid = ({contacts,setContacts}) => {
           <ContactCard key={contact.id} contact={contact} setContacts={setContacts}/>
         ))}
       </Grid>
-
-      {isLoading && (
-        <VStack colorPalette="teal" justifyContent={"center"}>
-          <Spinner color="colorPalette.600" />
-          <Text>Loading...</Text>
-        </VStack>
-      )}
-      {!isLoading && contacts.length === 0 && (
-        <Flex justifyContent={"center"}>
-          <VStack fontSize={"xl"}>
-            <Text as={"span"} fontSize={"2xl"} fontWeight={"bold"} mr={2}>
-              OOOPS 🙀
-            </Text>
-            No Contact to Comb
-          </VStack>
-        </Flex>
-      )}
     </>
   )
 }

@@ -5,11 +5,13 @@ import { LuMoon, LuSun } from "react-icons/lu"
 import CreateContact from './CreateContact'
 import { BiListUl, BiSearchAlt } from 'react-icons/bi'
 import { BASE_URL } from '@/App'
+import { toaster } from './toaster'
 
-const Navbar = ({contacts,setContacts}) => {
+const Navbar = ({setContacts}) => {
   const { toggleColorMode, colorMode } = useColorMode()
   const [isLoading, setIsLoading] = useState(true)
   const [input, setInput] = useState({firstName: "",})
+
   const handleGetAll = async() => {
     try{
       const res = await fetch(BASE_URL + "/contacts")
@@ -21,7 +23,10 @@ const Navbar = ({contacts,setContacts}) => {
 
       setContacts(data)
     }catch(error){
-      console.error(error)
+      toaster.error({
+        title: "Something Went Wrong 😕",
+        description: error.message,
+      })
     }finally{
       setIsLoading(false)
     }
@@ -38,7 +43,10 @@ const Navbar = ({contacts,setContacts}) => {
 
       setContacts(data)
     }catch(error){
-      console.error(error)
+      toaster.error({
+        title: "Something Went Wrong 😕",
+        description: error.message,
+      })
     }finally{
       setIsLoading(false)
       setInput({firstName:""})

@@ -1,13 +1,16 @@
-from app import app, db
-from flask import request, jsonify
+from app import app, db, frontend_path
+from flask import request, jsonify, send_from_directory
 from models import Contact
 from handlers import status
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import or_
+from sqlalchemy import or_, cast
+from sqlalchemy.types import String
 
-@app.route("/")
-def index():
-    return jsonify(name="Account REST API Service"), status.HTTP_200_OK
+@app.route("/", defaults={"filename":""})
+@app.route("/<path:filename>")
+def index(filename):
+    if not filename:
+        filename = "index.html"
+    return send_from_directory(frontend_path,filename), status.HTTP_200_OK
 
 
 #########################################################
@@ -18,8 +21,8 @@ def get_all_accounts():
     """ Lists all the Contacts available """
     contacts = Contact.query.all()
     contact_list = [contact.serialize() for contact in contacts]
-    if not contacts:
-        return jsonify({"error": status.HTTP_204_NO_CONTENT, "message": f"No contacts found :("})
+    # if not contacts:
+    #     return jsonify({"error": status.HTTP_204_NO_CONTENT, "message": f"No contacts found :("})
     return jsonify(contact_list), status.HTTP_200_OK
 
 
@@ -42,18 +45,19 @@ def create_contacts():
 #########################################################
 # Read a contact
 #########################################################
-@app.route("/contacts/<int:contact_id>", methods=["GET"])
-def read_contact_by_id(contact_id):
-    """ Reads a particular contact given it's ID """
-    contact = Contact.query.get(contact_id)
-    if not contact:
-        return jsonify({"error": status.HTTP_404_NOT_FOUND, "message": f"No contacts found with ID: {contact_id} :("})
+# @app.route("/contacts/<int:contact_id>", methods=["GET"])
+# def read_contact_by_id(contact_id):
+#     """ Reads a particular contact given it's ID """
+#     contact = Contact.query.get(contact_id)
+#     if not contact:
+#         return jsonify({"error": status.HTTP_404_NOT_FOUND, "message": f"No contacts found with ID: {contact_id} :("})
     
-    return jsonify(contact.serialize()), status.HTTP_200_OK
+#     return jsonify(contact.serialize()), status.HTTP_200_OK
             
-@app.route("/contacts/<string:input>", methods=["GET"])
+@app.route("/contacts/<input>", methods=["GET"])
 def read_contact_by_name(input):
-    """ Reads all contacts with the provided first name """
+    """ Reads all contacts with the provided input """
+    input = str(input)
     contacts = Contact.query.filter(
                 or_(
                     Contact.fname.ilike(f"%{input}%"),
@@ -64,11 +68,12 @@ def read_contact_by_name(input):
                     Contact.phone_number_2.ilike(f"%{input}%"),
                     Contact.email.ilike(f"%{input}%"),
                     Contact.gender.ilike(f"%{input}%"),
-                    Contact.birthday.ilike(f"%{input}%")
+                    cast(Contact.birthday,String).ilike(f"%{input}%")
                 )
             ).all()
-    if not contacts:
-        return jsonify({"error": status.HTTP_404_NOT_FOUND, "message": f"No contacts found with name: {contact_name} :("})
+    
+    # if not contacts:
+    #     return jsonify({"error": status.HTTP_404_NOT_FOUND, "message": f"No contacts found with name: {contact_name} :("})
         
     contact_list = [contact.serialize() for contact in contacts]
     return jsonify(contact_list), status.HTTP_200_OK

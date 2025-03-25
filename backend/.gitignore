@@ -22,7 +22,3 @@ contacts.db
 
 # Compiled Python files
 *.pyc
-
-# Dependency directories
-node_modules/
-/dist/
