@@ -60,16 +60,17 @@ class Contact(db.Model, Persistence):
 
     def deserialize(self, data, purpose="normal"):
         try:
-                            
+            date = "-".join(str(data.get("birthday")).split('-')[::-1])
+            
             self.fname = data.get("firstName")
             self.lname = data.get("lastName")
             self.notes = data.get("notes")
             self.phone_number_1 = data.get("phoneNumber1")
             self.phone_number_2 = data.get("phoneNumber2")
             self.email = data.get("email")
-            self.birthday = data.get("birthday")
+            self.birthday = date
             
-            if purpose is "normal":
+            if purpose == "normal":
                 self.source = data.get("source")
                 self.gender = data.get("gender")
                 

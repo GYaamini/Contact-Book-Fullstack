@@ -8,7 +8,6 @@ export const BASE_URL = "http://127.0.0.1:5000"
 
 function App() {
   const [contacts, setContacts] = useState([])
-  console.log(contacts)
   return <>
     <Toaster/>
     <Stack minH={"100vh"}>

@@ -21,7 +21,6 @@ const EditContact = ({contact,setContacts}) => {
     const handleSubmit = async(e) => {
         e.preventDefault()
         setIsLoading(true)
-        console.log(inputs)
 
         try{
             const res = await fetch(BASE_URL + "/contacts/"+contact.id,{
@@ -33,7 +32,6 @@ const EditContact = ({contact,setContacts}) => {
             })
 
             const data = await res.json()
-            console.log(data.message)
             if(!res.ok){
                 throw new Error(data.error)
             }

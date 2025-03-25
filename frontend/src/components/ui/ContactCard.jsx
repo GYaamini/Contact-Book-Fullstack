@@ -16,9 +16,8 @@ const ContactCard = ({contact,setContacts}) => {
                     method: "DELETE",
                 })
 
-                const data = res.json()
                 if(!res.ok){
-                    throw new Error(data.error)
+                    throw new Error(res.error)
                 }
 
                 setContacts((prevContacts) => prevContacts.filter((con) => con.id !== contact.id))

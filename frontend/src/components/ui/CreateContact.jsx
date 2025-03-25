@@ -25,7 +25,7 @@ const CreateContact = ({setContacts}) => {
         e.preventDefault()
         setIsLoading(true)
 
-        if(!inputs.notes || !inputs.source || !inputs.phoneNumber1){
+        if(!inputs.notes){
             inputs.notes = "..."
         }
         if(!inputs.phoneNumber2){
@@ -34,6 +34,7 @@ const CreateContact = ({setContacts}) => {
         if(!inputs.email){
             inputs.email = "🤷‍♀️"
         }
+        
         try{
             const res = await fetch(BASE_URL + "/contacts",{
                 method: "POST",
