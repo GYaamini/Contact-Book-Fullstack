@@ -75,9 +75,9 @@ class Contact(db.Model, Persistence):
                 
                 if self.gender!="":
                     gen = "boy" if self.gender=="Male" else "girl"
-                    self.image_url = f"https://avatar.iran.liara.run/public/{gen}?username={self.fname+" "+self.lname}"
+                    self.image_url = f"https://avatar.iran.liara.run/public/{gen}?username={self.fname+' '+self.lname}"
                 else:
-                    self.image_url = f"https://avatar.iran.liara.run/username?username={self.fname+" "+self.lname}"
+                    self.image_url = f"https://avatar.iran.liara.run/username?username={self.fname+' '+self.lname}"
         except AttributeError as error:
             raise DataValidationError("Invalid attribute: " + error.args[0])
         except TypeError as error:
