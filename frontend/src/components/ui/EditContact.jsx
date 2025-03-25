@@ -67,7 +67,7 @@ const EditContact = ({contact,setContacts}) => {
                     <form onSubmit={handleSubmit}>
                         <Dialog.Content>
                             <Dialog.Header>
-                                <Dialog.Title>New Contact 🐽</Dialog.Title>
+                                <Dialog.Title>Edit Contact 📝</Dialog.Title>
                             </Dialog.Header>
                             <Dialog.Body pb={10}>
                                 <Stack gap="10">

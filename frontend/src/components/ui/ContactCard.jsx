@@ -7,6 +7,11 @@ import { BASE_URL } from '@/App'
 import { toaster } from './toaster'
 
 const ContactCard = ({contact,setContacts}) => {
+    const handleDate = (birthday) =>{
+        const date = String(birthday)
+        return date.split('-').reverse().join('-')
+    }
+
     const handleChange = async() => {
         const name = contact.firstName+ " "+contact.lastName
         const confirmDelete = window.confirm("Are you sure you want to delete "+name+"?")
@@ -66,7 +71,7 @@ const ContactCard = ({contact,setContacts}) => {
             </Card.Description>
             <Flex gap="5" justifyContent={"space-between"}>
                 <Text>{contact.gender}</Text>
-                <Text>{contact.birthday}</Text>
+                <Text>{handleDate(contact.birthday)}</Text>
             </Flex>
             <Box borderRadius="md" paddingTop="3" paddingBottom="3" bg={useColorModeValue("gray.200","gray.900")}>                    
                 <Text fontWeight="bold" textStyle="sm">{"Mobile : " + contact.phoneNumber1}</Text>
