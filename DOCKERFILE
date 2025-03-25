@@ -4,14 +4,9 @@ FROM node:16 AS frontend
 # Set working directory for frontend
 WORKDIR /frontend
 
-# Copy package.json and package-lock.json for dependencies
-COPY frontend/package*.json ./
-
-# Install dependencies
-RUN npm install
-
 # Build the production build for Vite
 COPY frontend/ ./
+RUN npm install
 RUN npm run build
 
 # Step 2: Set up Backend (Flask)
