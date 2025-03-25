@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'  # or your desired Node.js version
+          node-version: 'latest'  # or your desired Node.js version
 
       # Install dependencies and build the Vite app
       - name: Install dependencies
@@ -34,4 +34,4 @@ jobs:
           branch: gh-pages  # The branch to deploy to
           folder: frontend/dist  # The folder containing the production build
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN}}  # Automatically provided by GitHub Actions
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}  # Automatically provided by GitHub Actions
