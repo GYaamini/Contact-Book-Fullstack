@@ -34,4 +34,4 @@ jobs:
           branch: gh-pages  # The branch to deploy to
           folder: frontend/dist  # The folder containing the production build
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOKEN: ${{ secrets.TOKEN }}
