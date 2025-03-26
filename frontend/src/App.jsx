@@ -4,8 +4,8 @@ import Navbar from './components/ui/Navbar'
 import ContactGrid from './components/ui/ContactGrid'
 import { Toaster, toaster } from './components/ui/toaster'
 
-// export const BASE_URL = "https://contact-book-fullstack.onrender.com"
-export const BASE_URL = "http://127.0.0.1:5000"
+export const BASE_URL = "https://contact-book-fullstack.onrender.com"
+// export const BASE_URL = "http://127.0.0.1:5000"
 
 function App() {
   const [contacts, setContacts] = useState([])
