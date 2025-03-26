@@ -1,6 +1,7 @@
 from app import db
-from handlers import status
-from flask import jsonify
+import qrcode
+from io import BytesIO
+import base64
 
 class DataValidationError(Exception):
     """Used for describing any data validation error"""
@@ -41,8 +42,10 @@ class Contact(db.Model, Persistence):
     email = db.Column(db.String(100), nullable=True)
     gender = db.Column(db.String(10), nullable=True)
     birthday = db.Column(db.String(15), nullable=True)
-    image_url = db.Column(db.String(200), nullable=True)
-    
+    image_url = db.Column(db.String(200), nullable=False)
+    qr_image_url = db.Column(db.String(200), nullable=False)
+
+        
     def serialize(self):
         if self.birthday != "":
             d,m,y = self.birthday.split('-')
@@ -62,9 +65,43 @@ class Contact(db.Model, Persistence):
             "gender": self.gender,
             "birthday": date,
             "imgURL": self.image_url,
+            "imgQR": self.qr_image_url,
         }
 
     def deserialize(self, data, purpose="normal"):
+        def generateQR(self):
+            data = {
+                "First Name": self.fname,
+                "Last Name": self.lname if self.lname != "" else "🤷‍♀️",
+                "Source/ Where do I know them from": self.source,
+                "Notes about them": self.notes,
+                "Mobile Number": self.phone_number_1,
+                "Work Number": self.phone_number_2,
+                "E-mail": self.email,
+                "Gender": self.gender,
+                "Birthday": self.birthday if self.birthday != "" else "🤷‍♀️",
+            }
+            qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_L,
+                box_size=10,
+                border=4,
+            )
+            qr.add_data(data)
+            qr.make(fit=True)
+
+            img = qr.make_image(fill="black", back_color="white")
+
+            img_byte_array = BytesIO()
+            img.save(img_byte_array)
+            img_byte_array.seek(0)
+            
+            qr_img = base64.b64encode(img_byte_array.getvalue()).decode('utf-8')
+            qr_url = f"data:image/png;base64,{qr_img}"
+            
+            return qr_url
+            
+    
         try:
             date = data.get("birthday")
             if date != "":
@@ -87,6 +124,9 @@ class Contact(db.Model, Persistence):
                     self.image_url = f"https://avatar.iran.liara.run/public/{gen}?username={self.fname+' '+self.lname}"
                 else:
                     self.image_url = f"https://avatar.iran.liara.run/username?username={self.fname+' '+self.lname}"
+
+            self.qr_image_url = generateQR(self)
+        
         except AttributeError as error:
             raise DataValidationError("Invalid attribute: " + error.args[0])
         except TypeError as error:

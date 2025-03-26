@@ -1,4 +1,4 @@
-import { Avatar, Box, Card, Flex, HStack, IconButton, Stack, Text } from '@chakra-ui/react'
+import { Avatar, Box, Card, Flex, HStack, IconButton, Image, Stack, Text } from '@chakra-ui/react'
 import React from 'react'
 import { BiTrash } from 'react-icons/bi'
 import { useColorModeValue } from './color-mode'
@@ -78,11 +78,13 @@ const ContactCard = ({contact,setContacts}) => {
                 <Text>{"Work : " + contact.phoneNumber2}</Text>
                 <Text>{"Email : " + contact.email}</Text>
             </Box>
-            
         </Card.Body>
-        <Card.Footer justifyContent="flex-end">
-            
-
+        <Card.Footer justifyContent="center">
+            <Image
+                src={contact.imgQR}
+                alt="QR Image"
+                width="100px"
+            />
         </Card.Footer>
     </Card.Root>
     </>

@@ -56,8 +56,12 @@ const ContactGrid = ({contacts,setContacts}) => {
         }}
         gap={4}
       >
-        {contacts.map((contact)=>(
-          <ContactCard key={contact.id} contact={contact} setContacts={setContacts}/>
+        {[...contacts].sort((a, b) => {
+          const firstNameA = a.firstName ? a.firstName.toLowerCase() : "";  // Avoid undefined
+          const firstNameB = b.firstName ? b.firstName.toLowerCase() : "";
+          return firstNameA.localeCompare(firstNameB);  // Sort alphabetically
+        }).map((contact)=>(
+          <ContactCard contact={contact} setContacts={setContacts}/>
         ))}
       </Grid>
     </>

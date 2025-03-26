@@ -2,7 +2,7 @@
 
 **Contact Management Full-Stact Application with Flask and React**
 
-![Demo App](https://github.com/user-attachments/assets/74612380-084e-4a6c-9988-3a5a88e5273c)
+![Demo App](https://github.com/user-attachments/assets/5788987f-41ca-4c8e-802d-185ad703535a)
 
 
 ### Table of Contents
@@ -17,9 +17,12 @@
     - Containerized with **Docker**
     - Deployed on **Render**
 
-4. Light and Dark Mode: Enjoy a personalized user interface experience with light and dark mode options.
+4. **QR-Code**: Can scan and get the details of any contact card
 
-5. Responsive Design: The app is designed to adapt to various screen sizes, ensuring a consistent experience across devices.
+5. Contacts cards are displayed in responsive grid layout to adjust the screen size dynamically and are **ordered alphabetically** according to their first names.
+
+6. Light and Dark Mode: Enjoy a personalized user interface experience with light and dark mode options.
+
 
 ### Run the App Locally
 
