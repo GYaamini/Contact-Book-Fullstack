@@ -1,4 +1,4 @@
-name: Deploy Vite App to GitHub Pages
+name: Deploy App to GitHub Pages and Render
 
 on:
   push:
@@ -30,9 +30,31 @@ jobs:
           npm install
           npm run build
 
+      # Set up Python for the backend
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'  # or your desired Python version
+
+      # Install backend dependencies
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+
       # Deploy to GitHub Pages using gh-pages
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages  # The branch to deploy to
           folder: frontend/dist  # The folder containing the production build
+
+      # Deploy the project to Render
+      - name: Deploy to Render
+        uses: render-examples/actions@v1
+        with:
+          RENDER_PAT: ${{ secrets.RENDER_PAT }}  # Store your Render API key in GitHub Secrets
+          service_name: backend  # Your backend service name on Render
+          branch: main
+          repo_name: GYaamini/Contact-Book-Fullstack
+          region: us
