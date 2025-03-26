@@ -61,7 +61,7 @@ const ContactGrid = ({contacts,setContacts}) => {
           const firstNameB = b.firstName ? b.firstName.toLowerCase() : "";
           return firstNameA.localeCompare(firstNameB);  // Sort alphabetically
         }).map((contact)=>(
-          <ContactCard contact={contact} setContacts={setContacts}/>
+          <ContactCard key={contact.id} contact={contact} setContacts={setContacts}/>
         ))}
       </Grid>
     </>
