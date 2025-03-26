@@ -34,7 +34,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.9'  # or your desired Python version
+          python-version: '3.13'  # or your desired Python version
 
       # Install backend dependencies
       - name: Install backend dependencies
@@ -51,10 +51,8 @@ jobs:
 
       # Deploy the project to Render
       - name: Deploy to Render
-        uses: render-examples/actions@v1
+        uses: JorgeLNJunior/render-deploy@v1.4.5
         with:
-          RENDER_PAT: ${{ secrets.RENDER_PAT }}  # Store your Render API key in GitHub Secrets
-          service_name: backend  # Your backend service name on Render
-          branch: main
-          repo_name: GYaamini/Contact-Book-Fullstack
-          region: us
+          service_id: ${{ secrets.RENDER_SERVICE_ID }}
+          api_key: ${{ secrets.RENDER_PAT }}
+          wait_deploy: true
