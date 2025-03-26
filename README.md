@@ -9,7 +9,7 @@
 
 1. **Tech Stack**: 
     - Backend: **Python, Flask, SQLite, SQLAlchemy**
-    - Frontend: **React and Chakra UI V3 with Vite**
+    - Frontend: **React and Chakra UI v3 with Vite**
 
 2. **CRUD Functionality**: Create, Search/Read specific contacts, List all contacts, Update, and Delete contacts
 
