@@ -44,8 +44,12 @@ class Contact(db.Model, Persistence):
     image_url = db.Column(db.String(200), nullable=True)
     
     def serialize(self):
-        d,m,y = self.birthday.split('-')
-        date = y+'-'+m+'-'+d
+        if self.birthday != "":
+            d,m,y = self.birthday.split('-')
+            date = y+'-'+m+'-'+d
+        else:
+            date = ""
+        
         return {
             "id": self.id,
             "firstName": self.fname,
@@ -62,7 +66,9 @@ class Contact(db.Model, Persistence):
 
     def deserialize(self, data, purpose="normal"):
         try:
-            date = "-".join(data.get("birthday").split('-')[::-1])
+            date = data.get("birthday")
+            if date != "":
+                date = "-".join(date.split('-')[::-1])
             
             self.fname = data.get("firstName")
             self.lname = data.get("lastName")
