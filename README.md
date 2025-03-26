@@ -35,8 +35,8 @@
     cd frontend
     ```
     * Open App.jsx under ./src
-        * Uncomment local BASE_URL http://127.0.0.1:5000
-        * Comment render BASE_URL https://contact-book-fullstack.onrender.com
+        * Uncomment local BASE_URL used for local development (http://127.0.0.1:5000)
+        * Comment render BASE_URL used for gh-pages and Render deployment (https://contact-book-fullstack.onrender.com)
     
     ```bash
     npm install
@@ -53,3 +53,6 @@
     ```
 
 5. Open browser and go to `http://localhost:5000/` to view the application
+
+## Acknowledgements
+The architecture and structure of this project were inspired by : [As a Programmer](https://github.com/burakorkmez/react-python-tutorial)
