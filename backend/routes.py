@@ -2,7 +2,7 @@ from app import app, db, frontend_path
 from flask import request, jsonify, send_from_directory
 from models import Contact
 from handlers import status
-from sqlalchemy import or_, cast
+from sqlalchemy import or_, cast, func
 from sqlalchemy.types import String
 
 @app.route("/", defaults={"filename":""})
@@ -67,7 +67,7 @@ def read_contact_by_name(input):
                     Contact.phone_number_1.ilike(f"%{input}%"),
                     Contact.phone_number_2.ilike(f"%{input}%"),
                     Contact.email.ilike(f"%{input}%"),
-                    Contact.gender.ilike(f"%{input}%"),
+                    func.lower(Contact.gender).ilike(f"{input}"),
                     cast(Contact.birthday,String).ilike(f"%{input}%")
                 )
             ).all()
