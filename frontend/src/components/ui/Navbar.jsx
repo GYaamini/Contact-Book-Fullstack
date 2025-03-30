@@ -12,6 +12,7 @@ const Navbar = ({setContacts, showDash, setShowDash}) => {
   const [isLoading, setIsLoading] = useState(true)
   const [input, setInput] = useState({searchInput: "",})
 
+  // Toggle to handle Contact Grid view and Dashboard view
   const toggleDash = async() => {
     setShowDash(!showDash)
     try{
@@ -27,6 +28,7 @@ const Navbar = ({setContacts, showDash, setShowDash}) => {
     }
   }
 
+  // Handles List all contacts action by sending GET request to List All route
   const handleGetAll = async() => {
     try{
       const res = await fetch(BASE_URL + "/contacts")
@@ -35,7 +37,8 @@ const Navbar = ({setContacts, showDash, setShowDash}) => {
       if(! res.ok){
         throw new Error(data.error)
       }
-
+      
+      // Update useState with all existing contacts
       setContacts(data)
     }catch(error){
       toaster.error({
@@ -47,6 +50,7 @@ const Navbar = ({setContacts, showDash, setShowDash}) => {
     }
   }
 
+  // Handles search action to get specific contact by sending GET request to Read route
   const handleGetContact = async(e) => {
     try{
       const res = await fetch(BASE_URL + "/contacts/" + input.firstName)
@@ -56,6 +60,7 @@ const Navbar = ({setContacts, showDash, setShowDash}) => {
         throw new Error(data.error)
       }
 
+      // Update useState by setting only the specific contact/contacts
       setContacts(data)
     }catch(error){
       toaster.error({
@@ -67,6 +72,7 @@ const Navbar = ({setContacts, showDash, setShowDash}) => {
       setInput({searchInput:""})
     }
   }
+
   return <>
     <Container maxW={"800px"}>
       <Box px={4} my={4} borderRadius={5} bg={useColorModeValue("gray.200","gray.900")}>

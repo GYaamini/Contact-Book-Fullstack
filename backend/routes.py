@@ -2,6 +2,7 @@ from app import flask_app, frontend_path
 from flask import request, jsonify, send_from_directory, redirect
 from models import Contact
 from handlers import status
+from datetime import datetime
 from sqlalchemy import or_, cast, func
 from sqlalchemy.types import String
 import pandas as pd
@@ -133,14 +134,19 @@ def get_dashboard():
             (start_month == month and day >= start_day) or \
             (end_month == month and day <= end_day):
                 return sign
+
     contacts = Contact.query.with_entities(Contact.source,Contact.gender,Contact.birthday).all()
-    if contacts:      
+    if contacts:    
+        # Derive year, zodiac sign and age columns from the contacts information  
         df = pd.DataFrame.from_records(contacts, columns=["source", "gender", "birthday"])
         df = df[(df.gender != "") & (df.birthday != "")]
         df['birthday'] = pd.to_datetime(df['birthday'], format='%d-%m-%Y', errors='coerce')
         df['year'] = df['birthday'].dt.year
         df['zodiac_sign'] = df['birthday'].apply(get_zodiac_sign)
+        current_year = datetime.now().year
+        df['age'] = current_year - df['year']
         
+        # Save dataframe into .csv file
         df.to_csv("contact_details.csv", index=True, header=True)
     
     return redirect('/dashboard')

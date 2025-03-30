@@ -21,10 +21,13 @@ const CreateContact = ({setContacts}) => {
     })
     const ref = useRef<HTMLInputElement>(null)
 
-    const handleSubmit = async(e) => {
+    // Handles Create action by sending POST request
+    const handleCreateContact = async(e) => {
         e.preventDefault()
         setIsLoading(true)
 
+        // If notes, work number, and email is empty in the form input
+        // replace "" with placeholders
         if(!inputs.notes){
             inputs.notes = "..."
         }
@@ -50,6 +53,7 @@ const CreateContact = ({setContacts}) => {
                 throw new Error(data.error)
             }
             
+            // Update useState by appending new contact info
             setContacts((prevContacts) => [...prevContacts, data])
             toaster.success({
                 title: "Contact Saved 🎉",
@@ -89,7 +93,7 @@ const CreateContact = ({setContacts}) => {
             <Portal>
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleCreateContact}>
                         <Dialog.Content>
                             <Dialog.Header>
                                 <Dialog.Title>New Contact 🐽</Dialog.Title>

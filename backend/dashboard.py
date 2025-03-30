@@ -7,10 +7,11 @@ import pandas as pd
 
 
 def create_dash(flask_app):    
+    """ Create a dash application to run inside flask server """
     dash_app = Dash(__name__, eager_loading=True, server=flask_app, url_base_pathname='/dashboard/')
     filepath = 'contact_details.csv'
     if Path(filepath).stat().st_size == 0:
-        print("if")
+        # check if the .csv file is empty and render a no records page in dash
         dash_app.layout = html.Div([html.H1("Contact Records Dashboard",
                                             style={"textAlign": "center", "color": "#0a0a0a",
                                                 "font-size": 40}
@@ -20,7 +21,7 @@ def create_dash(flask_app):
                                                 "font-size": 20}),
                                     ])
     else:
-        print("else")
+        # if the .csv file contains records, render the dash page with dropdown charts and range controlled charts
         contact_df = pd.read_csv(filepath)
         max_year = contact_df["year"].max()
         min_year = contact_df["year"].min()
@@ -34,14 +35,15 @@ def create_dash(flask_app):
                                                         options=[
                                                             {"label": "Source", "value": "source"},
                                                             {"label": "Gender", "value": "gender"},
-                                                            {"label": "Zodiac Sign", "value": "zodiac_sign"}
+                                                            {"label": "Zodiac Sign", "value": "zodiac_sign"},
+                                                            {"label": "Age", "value": "age"}
                                                         ],
                                                         placeholder="Select",
                                                         searchable=True
                                             ),
                                             html.Br(),
 
-                                            # Charts for source, gender, zodiac sign
+                                            # Charts for source, gender, zodiac sign, and age-group
                                             html.Div(dcc.Graph(id="dynamic-chart")),
                                             html.Br(),
 
@@ -53,6 +55,7 @@ def create_dash(flask_app):
                                                             value=[min_year, max_year],
                                                             marks=marks
                                             ),
+                                            # Chart for years grouped in decade
                                             html.Div(dcc.Graph(id="year-line-chart")),
                                             ])
 
@@ -62,8 +65,10 @@ def create_dash(flask_app):
             Input("year-slider", "value")
         )
         def update_year_line_chart(selected_range):
+            contact_df = pd.read_csv('contact_details.csv')
             filtered_df = contact_df[(contact_df['year'] >= selected_range[0]) & (contact_df['year'] <= selected_range[1])].copy()
             
+            # For a decade year interval
             start_decade = (selected_range[0] // 10) * 10
             end_decade = (selected_range[1] // 10) * 10
             
@@ -88,6 +93,7 @@ def create_dash(flask_app):
             Input(component_id="year-slider", component_property="value")]
         )
         def update_dynamic_chart(selected_value, selected_range):
+            contact_df = pd.read_csv('contact_details.csv')
             filtered_df = contact_df[(contact_df['year'] >= selected_range[0]) & (contact_df['year'] <= selected_range[1])].copy()
             if not selected_value:
                 return []
@@ -118,5 +124,22 @@ def create_dash(flask_app):
                             color='Zodiac Sign')
                 return fig
 
+            elif selected_value == "age":
+                # Bar chart for age-group distribution
+                bins = list(range(0, filtered_df['age'].max() + 10, 10))
+                labels = [f"{bins[i]}-{bins[i+1]-1}" for i in range(len(bins)-1)]
+                filtered_df['age_group'] = pd.cut(filtered_df['age'], bins=bins, labels=labels, right=False)
+                age_group_counts = filtered_df['age_group'].value_counts().sort_index()
+
+                plot_data = pd.DataFrame({
+                    'Age Group': age_group_counts.index,
+                    'Count': age_group_counts.values
+                })
+                
+                fig = px.bar(plot_data,
+                            x='Age Group', y='Count', 
+                            title='Age Distribution',
+                            color="Count")
+                return fig
         
     return dash_app

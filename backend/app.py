@@ -9,12 +9,16 @@ import dashboard
 
 load_dotenv()
 
+# Flash app initialization
 flask_app = Flask(__name__)
+
+# Dash app initialization
 dash_app = dashboard.create_dash(flask_app)
 
 # Comment this out for production
 CORS(flask_app)
 
+# Database configuration and initialization
 flask_app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///contacts.db"
 flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

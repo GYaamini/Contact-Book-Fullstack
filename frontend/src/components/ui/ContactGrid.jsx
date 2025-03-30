@@ -5,7 +5,10 @@ import { BASE_URL } from '@/App'
 import { toaster } from './toaster'
 
 const ContactGrid = ({contacts,setContacts}) => {
+  // To control loading state
   const [isLoading, setIsLoading] = useState(true)
+
+  // Fetch all contact details by sending GET request
   useEffect(()=>{
     const getContacts = async() => {
       try{
@@ -16,6 +19,7 @@ const ContactGrid = ({contacts,setContacts}) => {
           throw new Error(data.error)
         }
 
+        // Update useState with fetched data
         setContacts(data)
       }catch(error){
         toaster.error({
@@ -28,6 +32,7 @@ const ContactGrid = ({contacts,setContacts}) => {
     }
     getContacts()
   },[setContacts])
+
   return (
     <>
       {isLoading && (

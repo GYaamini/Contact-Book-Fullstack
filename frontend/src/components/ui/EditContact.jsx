@@ -18,7 +18,8 @@ const EditContact = ({contact,setContacts}) => {
         birthday: contact.birthday,
     })
 
-    const handleSubmit = async(e) => {
+    // Handles Edit action by sending PUT request
+    const handleEditContact = async(e) => {
         e.preventDefault()
         setIsLoading(true)
 
@@ -36,6 +37,7 @@ const EditContact = ({contact,setContacts}) => {
                 throw new Error(data.error)
             }
 
+            // Update useState by replacing the edited data with previous data
             setContacts((prevContacts) => prevContacts.map((con) => con.id === contact.id ? data : con))
             toaster.success({
                 title: "Contact Edited 👍",
@@ -64,7 +66,7 @@ const EditContact = ({contact,setContacts}) => {
             <Portal>
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleEditContact}>
                         <Dialog.Content>
                             <Dialog.Header>
                                 <Dialog.Title>Edit Contact 📝</Dialog.Title>

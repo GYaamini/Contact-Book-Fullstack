@@ -7,12 +7,14 @@ import { BASE_URL } from '@/App'
 import { toaster } from './toaster'
 
 const ContactCard = ({contact,setContacts}) => {
+    // Convert incoming Date type input into dd-mm-yyyy format for displaying 
     const handleDate = (birthday) =>{
         const date = String(birthday)
         return date.split('-').reverse().join('-')
     }
 
-    const handleChange = async() => {
+    // Handles Contact delete action by sending DELETE request
+    const handleDeleteContact = async() => {
         const name = contact.firstName+ " "+contact.lastName
         const confirmDelete = window.confirm("Are you sure you want to delete "+name+"?")
         if(confirmDelete){
@@ -24,7 +26,7 @@ const ContactCard = ({contact,setContacts}) => {
                 if(!res.ok){
                     throw new Error(res.error)
                 }
-
+                // Delete the contact info from useState
                 setContacts((prevContacts) => prevContacts.filter((con) => con.id !== contact.id))
                 toaster.success({
                     title: "Contact Deleted 😤",
@@ -59,7 +61,7 @@ const ContactCard = ({contact,setContacts}) => {
                     variant="ghost"
                     size={"sm"}
                     aria-label="See menu"
-                    onClick={handleChange}
+                    onClick={handleDeleteContact}
                 >
                     <BiTrash size={40}/>
                 </IconButton>

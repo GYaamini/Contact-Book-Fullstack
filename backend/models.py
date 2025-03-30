@@ -47,6 +47,10 @@ class Contact(db.Model, Persistence):
 
         
     def serialize(self):
+        """ Serialize/pack data in a dictionary """
+        
+        # While unpacking data, make date as yyyy-mm-dd format for frontend
+        # the date placeholder in dialog box can only accept yyyy-mm-dd as Date type
         if self.birthday != "":
             d,m,y = self.birthday.split('-')
             date = y+'-'+m+'-'+d
@@ -69,7 +73,10 @@ class Contact(db.Model, Persistence):
         }
 
     def deserialize(self, data, purpose="normal"):
+        """ Deserialize/unpack date """
+
         def generateQR(self):
+            """ Generate QR code for each contact """
             data = {
                 "First Name": self.fname,
                 "Last Name": self.lname if self.lname != "" else "🤷‍♀️",
@@ -103,10 +110,12 @@ class Contact(db.Model, Persistence):
             
     
         try:
+            # Save date in dd-mm-yyyy format
             date = data.get("birthday")
             if date != "":
                 date = "-".join(date.split('-')[::-1])
             
+            # Deserialize for Update request
             self.fname = data.get("firstName")
             self.lname = data.get("lastName")
             self.notes = data.get("notes")
@@ -115,6 +124,7 @@ class Contact(db.Model, Persistence):
             self.email = data.get("email")
             self.birthday = date
             
+            # Deserialize source, gender, and image for every other request
             if purpose == "normal":
                 self.source = data.get("source")
                 self.gender = data.get("gender")
