@@ -45,16 +45,17 @@ Dropdown Chart      |  Range Chart
     ```bash
     cd frontend
     ```
-    * Open App.jsx under ./src
-        * Uncomment local BASE_URL used for local development (http://127.0.0.1:5000)
-        * Comment render BASE_URL used for gh-pages and Render deployment (https://contact-book-fullstack.onrender.com)
+   * App.jsx under ./src
+        * For development BASE_URL, set VITE_BASE_URL = http://127.0.0.1:5000 under .env in the frontend root folder
+        * For Vite, import statement: import.meta.env.VITE_BASE_URL
+        * For production BASE_URL, set VITE_BASE_URL = https://repo-name.onrender.com under environmental variables on gh-pages and Render 
     
     ```bash
     npm install
     nom run build
     ```
 
-4. Set up Backend
+5. Set up Backend
     ```bash
     cd ../backend
     python3 -m venv venv
@@ -63,7 +64,7 @@ Dropdown Chart      |  Range Chart
     flask run
     ```
 
-5. Open browser and go to `http://localhost:5000/` to view the application
+6. Open browser and go to `http://localhost:5000/` to view the application
 
 ## Acknowledgements
 The architecture and structure of this project were inspired by : [As a Programmer](https://github.com/burakorkmez/react-python-tutorial)
