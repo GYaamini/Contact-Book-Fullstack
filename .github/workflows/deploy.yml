@@ -24,15 +24,13 @@ jobs:
           node-version: '22'
 
       # Install dependencies and build the Vite app
-      - name: Install dependencies
+      - name: Install frontend dependencies
+        env:
+            VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
         run: |
           cd frontend
           npm install
-
-      - name: Build frontend
-        env:
-          VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
-        run: npm run build
+          npm run build
 
       # Set up Python for the backend
       - name: Set up Python
