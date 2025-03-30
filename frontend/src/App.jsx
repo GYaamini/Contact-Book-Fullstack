@@ -34,7 +34,7 @@ function App() {
         </Text>
         {showDash ? (
           <iframe
-            src= {BASE_URL+"/dash"} // URL where Dash app is routed
+            src= {BASE_URL+"/dashboard"} // URL where Dash app is routed
             style={{ width: '100%', height: '600px', border: 'none' }}
             title="Dash Plot"
           ></iframe>
