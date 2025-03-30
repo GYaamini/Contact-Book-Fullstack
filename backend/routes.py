@@ -149,4 +149,4 @@ def get_dashboard():
         # Save dataframe into .csv file
         df.to_csv("contact_details.csv", index=True, header=True)
     
-    return redirect('/dashboard')
+    return flask_app.redirect('/dashboard')
