@@ -14,7 +14,6 @@ const Navbar = ({setContacts, showDash, setShowDash}) => {
 
   // Toggle to handle Contact Grid view and Dashboard view
   const toggleDash = async() => {
-    setShowDash(!showDash)
     try{
         const res = await fetch(BASE_URL + "/dash")
         if(! res.ok){
@@ -25,6 +24,8 @@ const Navbar = ({setContacts, showDash, setShowDash}) => {
         title: "Something Went Wrong 😕",
         description: error.message,
       })
+    }finally{
+      setShowDash(!showDash)
     }
   }
 

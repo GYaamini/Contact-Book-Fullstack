@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import { Container, Stack, Text } from '@chakra-ui/react'
 import Navbar from './components/ui/Navbar'
 import ContactGrid from './components/ui/ContactGrid'
-import { Toaster, toaster } from './components/ui/toaster'
+import { Toaster } from './components/ui/toaster'
 
-export const BASE_URL = "https://contact-book-fullstack.onrender.com"
-// export const BASE_URL = "http://127.0.0.1:5000"
+
+// Dynamically set BASE_URL for development and production
+export const BASE_URL = import.meta.env.VITE_BASE_URL
 
 function App() {
   const [contacts, setContacts] = useState([])
@@ -33,7 +34,7 @@ function App() {
         </Text>
         {showDash ? (
           <iframe
-            src= {BASE_URL+"/dashboard"} // URL where Dash app is served
+            src= {BASE_URL+"/dash"} // URL where Dash app is served
             style={{ width: '100%', height: '600px', border: 'none' }}
             title="Dash Plot"
           ></iframe>
