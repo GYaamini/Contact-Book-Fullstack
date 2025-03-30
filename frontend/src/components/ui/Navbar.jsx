@@ -54,7 +54,7 @@ const Navbar = ({setContacts, showDash, setShowDash}) => {
   // Handles search action to get specific contact by sending GET request to Read route
   const handleGetContact = async(e) => {
     try{
-      const res = await fetch(BASE_URL + "/contacts/" + input.firstName)
+      const res = await fetch(BASE_URL + "/contacts/" + input.searchInput)
       const data = await res.json()
 
       if(! res.ok){
@@ -70,7 +70,7 @@ const Navbar = ({setContacts, showDash, setShowDash}) => {
       })
     }finally{
       setIsLoading(false)
-      setInput({searchInput:""})
+      setInput({searchInput:"",})
     }
   }
 
@@ -95,7 +95,7 @@ const Navbar = ({setContacts, showDash, setShowDash}) => {
             <HStack gap="1" maxW="sm">
               <Field.Root orientation="horizontal">
                 <Input placeholder="Search" flex="1"
-                  value={input.firstName}
+                  value={input.searchInput}
                   onChange={(e) => setInput({...input, searchInput: e.target.value})} 
                 />
               </Field.Root>
