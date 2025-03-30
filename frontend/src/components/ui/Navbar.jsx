@@ -1,16 +1,31 @@
 import { Box, Button, Container, Field, Flex, HStack, IconButton, Input, Text } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import { React, useState } from 'react'
 import { useColorMode, useColorModeValue } from './color-mode'
 import { LuMoon, LuSun } from "react-icons/lu"
 import CreateContact from './CreateContact'
-import { BiListUl, BiSearchAlt } from 'react-icons/bi'
+import { BiListUl, BiSearchAlt, BiSolidDashboard } from 'react-icons/bi'
 import { BASE_URL } from '@/App'
 import { toaster } from './toaster'
 
-const Navbar = ({setContacts}) => {
+const Navbar = ({setContacts, showDash, setShowDash}) => {
   const { toggleColorMode, colorMode } = useColorMode()
   const [isLoading, setIsLoading] = useState(true)
-  const [input, setInput] = useState({firstName: "",})
+  const [input, setInput] = useState({searchInput: "",})
+
+  const toggleDash = async() => {
+    setShowDash(!showDash)
+    try{
+        const res = await fetch(BASE_URL + "/dash")
+        if(! res.ok){
+          throw new Error(data.error)
+        }
+    }catch(error){
+      toaster.error({
+        title: "Something Went Wrong 😕",
+        description: error.message,
+      })
+    }
+  }
 
   const handleGetAll = async() => {
     try{
@@ -49,7 +64,7 @@ const Navbar = ({setContacts}) => {
       })
     }finally{
       setIsLoading(false)
-      setInput({firstName:""})
+      setInput({searchInput:""})
     }
   }
   return <>
@@ -74,7 +89,7 @@ const Navbar = ({setContacts}) => {
               <Field.Root orientation="horizontal">
                 <Input placeholder="Search" flex="1"
                   value={input.firstName}
-                  onChange={(e) => setInput({...input, firstName: e.target.value})} 
+                  onChange={(e) => setInput({...input, searchInput: e.target.value})} 
                 />
               </Field.Root>
               <IconButton
@@ -88,7 +103,15 @@ const Navbar = ({setContacts}) => {
             </HStack>
             
           </Flex>
-          <Flex alignItems={"center"}>
+          <Flex gap ={3} alignItems={"center"}>
+            <IconButton
+                  variant="outline"
+                  size={"sm"}
+                  aria-label="See menu"
+                  onClick={toggleDash}
+              >
+                  <BiSolidDashboard size={40}/>
+            </IconButton>
             <Button onClick={toggleColorMode} variant="outline" size="sm">
             {colorMode === "light" ? <LuSun /> : <LuMoon />}
             </Button>

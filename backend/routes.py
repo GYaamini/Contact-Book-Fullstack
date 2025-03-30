@@ -1,12 +1,14 @@
-from app import app, db, frontend_path
-from flask import request, jsonify, send_from_directory
+from app import flask_app, frontend_path
+from flask import request, jsonify, send_from_directory, redirect
 from models import Contact
 from handlers import status
 from sqlalchemy import or_, cast, func
 from sqlalchemy.types import String
+import pandas as pd
 
-@app.route("/", defaults={"filename":""})
-@app.route("/<path:filename>")
+
+@flask_app.route("/", defaults={"filename":""})
+@flask_app.route("/<path:filename>")
 def index(filename):
     if not filename:
         filename = "index.html"
@@ -16,7 +18,7 @@ def index(filename):
 #########################################################
 # List all contacts
 #########################################################
-@app.route("/contacts", methods=["GET"])
+@flask_app.route("/contacts", methods=["GET"])
 def get_all_accounts():
     """ Lists all the Contacts available """
     contacts = Contact.query.all()
@@ -29,7 +31,7 @@ def get_all_accounts():
 #########################################################
 # Create contact
 #########################################################
-@app.route("/contacts", methods=["POST"])
+@flask_app.route("/contacts", methods=["POST"])
 def create_contacts():
     """ Creates a new Contact """
     new_contact = Contact()
@@ -45,7 +47,7 @@ def create_contacts():
 #########################################################
 # Read a contact
 #########################################################
-# @app.route("/contacts/<int:contact_id>", methods=["GET"])
+# @flask_app.route("/contacts/<int:contact_id>", methods=["GET"])
 # def read_contact_by_id(contact_id):
 #     """ Reads a particular contact given it's ID """
 #     contact = Contact.query.get(contact_id)
@@ -54,7 +56,7 @@ def create_contacts():
     
 #     return jsonify(contact.serialize()), status.HTTP_200_OK
             
-@app.route("/contacts/<input>", methods=["GET"])
+@flask_app.route("/contacts/<input>", methods=["GET"])
 def read_contact_by_name(input):
     """ Reads all contacts with the provided input """
     input = str(input)
@@ -82,7 +84,7 @@ def read_contact_by_name(input):
 #########################################################
 # Delete contact
 #########################################################
-@app.route("/contacts/<int:contact_id>", methods=["DELETE"])
+@flask_app.route("/contacts/<int:contact_id>", methods=["DELETE"])
 def delete_contact(contact_id):
     """ Deletes an contact from the database """
     contact = Contact.query.get(contact_id)
@@ -95,7 +97,7 @@ def delete_contact(contact_id):
 #########################################################
 # Update contact
 #########################################################
-@app.route("/contacts/<int:contact_id>", methods=["PUT"])
+@flask_app.route("/contacts/<int:contact_id>", methods=["PUT"])
 def update_contact(contact_id):
     """ Updates the details of a contact """
     contact = Contact.query.get(contact_id)
@@ -105,3 +107,40 @@ def update_contact(contact_id):
     contact.deserialize(request.json,"update")
     contact.update()
     return jsonify(contact.serialize()), status.HTTP_200_OK
+
+
+#########################################################
+# DASH Plots
+#########################################################
+@flask_app.route("/dash", methods=["GET"])
+def get_dashboard():
+    """ Retrieve data from database and plot in Dash"""
+    def get_zodiac_sign(date):
+        day = date.day
+        month = date.month
+        
+        zodiac_signs = [((21, 3), (19, 4), "Aries"), ((20, 4), (20, 5), "Taurus"), ((21, 5), (21, 6), "Gemini"),
+                        ((22, 6), (22, 7), "Cancer"), ((23, 7), (22, 8), "Leo"), ((23, 8), (22, 9), "Virgo"),
+                        ((23, 9), (23, 10), "Libra"), ((24, 10), (21, 11), "Scorpio"), ((22, 11), (21, 12), "Sagittarius"),
+                        ((22, 12), (19, 1), "Capricorn"), ((20, 1), (18, 2), "Aquarius"), ((19, 2), (20, 3), "Pisces")
+                        ]
+        
+        for start_date, end_date, sign in zodiac_signs:
+            start_day, start_month = start_date
+            end_day, end_month = end_date
+            
+            if (start_month < month < end_month) or \
+            (start_month == month and day >= start_day) or \
+            (end_month == month and day <= end_day):
+                return sign
+    contacts = Contact.query.with_entities(Contact.source,Contact.gender,Contact.birthday).all()
+    if contacts:      
+        df = pd.DataFrame.from_records(contacts, columns=["source", "gender", "birthday"])
+        df = df[(df.gender != "") & (df.birthday != "")]
+        df['birthday'] = pd.to_datetime(df['birthday'], format='%d-%m-%Y', errors='coerce')
+        df['year'] = df['birthday'].dt.year
+        df['zodiac_sign'] = df['birthday'].apply(get_zodiac_sign)
+        
+        df.to_csv("contact_details.csv", index=True, header=True)
+    
+    return redirect('/dashboard')
