@@ -1,4 +1,3 @@
-
 # Contact Comb
 
 **Contact Management Full-Stact Application with Flask and React**
